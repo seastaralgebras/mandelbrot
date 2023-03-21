@@ -1,0 +1,108 @@
+// stuff
+
+var math = require('mathjs');
+
+/*
+var c;
+var z;
+var x;
+*/
+
+function modulus(z) {
+    return math.multiply(z, math.conj(z));
+}
+
+function julia_iteration(z, c) {
+    return math.add(math.multiply(z,z), c);
+}
+
+function div_time(c, max_n) {
+    let threshold = 10;
+    let z = c;
+    for (let i = 0; i < max_n; i++) {
+        z = julia_iteration(z, c);
+        if (modulus(z) > threshold) {
+            return i;
+        }
+    }
+    return max_n;
+}
+
+function div_fraction(c, max_n) {
+    return 1-math.divide(math.log10(div_time(c, max_n)+1), math.log10(max_n));
+}
+
+function dec_to_hex(x) {
+    if (x > 255) {
+        return "ff";
+    } else if (x < 0) {
+        return "00;"
+    } else {
+        let n = math.floor(x);
+        if (n < 16) {
+            return "0"+n.toString(16);
+        } else {
+            return n.toString(16)
+        }
+    }
+}
+
+
+function to_color(t) {
+    let r = math.multiply(t, 0);
+    let g = math.multiply(t, 160);
+    let b = math.multiply(t, 255);
+    let r_hex = dec_to_hex(r);
+    let g_hex = dec_to_hex(g);
+    let b_hex = dec_to_hex(b);
+    return r_hex + g_hex + b_hex;
+}
+
+
+function matrix_generator(width_px) {
+    let x_c = -0.5;
+    let y_c = 0;
+    let width = 3.2;
+    let k_step = width/(width_px);
+    let x = x_c - width/2;
+    let y = y_c - width/2;
+    const square = [];
+    for (j = 0; j < width_px; j++) {
+        let row = [];
+        for (i = 0; i < width_px; i++) {
+            row[i] = math.complex(x+i*k_step, y+j*k_step);
+        }
+        square[j] = row;
+    }
+    return square;
+}
+
+
+function mandelbrot_set(width_px, max_iterations) {
+    let square = matrix_generator(width_px);
+    let pixels = [];
+    for (j = 0; j < width_px; j++) {
+        let row = [];
+        for (i = 0; i < width_px; i++) {
+            row[i] = to_color(div_fraction(square[j][i], max_iterations));
+        }
+        pixels[j] = row;
+    }
+    return pixels;
+}
+
+
+
+
+/*
+let c = math.complex(0.5, 0.5);
+let n = 100
+
+console.log(div_time(c, n));
+console.log(div_fraction(c, n));
+console.log(to_color(div_fraction(c, n)));
+
+let mandy = mandelbrot_set(10, 50);
+
+console.log(mandy)
+*/
