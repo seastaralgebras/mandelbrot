@@ -7,20 +7,22 @@
         border: 1px solid #000000;
     }
 </style>
+<script src="complex.js"></script>
+<script src="math.js" type="text/javascript"></script>
+<script src="https://unpkg.com/mathjs@11.7.0/lib/browser/math.js"></script>
 <script src="mandelbrot.js"></script>
 </head>
 
 <body>
 
-<canvas id="mandelbrot" width="50" height="50"></canvas>
+<canvas id="mandelbrot" width="500" height="500"></canvas>
+<br>
+<button onclick="drawMandelbrot(canvas)">Draw Mandelbrot set!</button>
 
-<!--
-<button onclick="drawMandelbrot()">Draw Mandelbrot set!</button>
--->
 
 <script>
     var canvas = document.getElementById("mandelbrot");
-    drawMandelbrot(canvas);
+    // drawMandelbrot(canvas);
 </script>
 
 </body>

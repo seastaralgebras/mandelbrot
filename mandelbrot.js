@@ -73,11 +73,14 @@ function matrix_generator(width_px) {
     let k_step = width/(width_px);
     let x = x_c - width/2;
     let y = y_c - width/2;
-    const square = [];
+    let square = [];
+    let row = [];
     for (j = 0; j < width_px; j++) {
-        let row = [];
+        row = [];
         for (i = 0; i < width_px; i++) {
-            row[i] = math.complex(x+i*k_step, y+j*k_step);
+            let thing = math.complex(1,1);
+            let point = math.complex(x+i*k_step, y+j*k_step);
+            row[i] = point;
         }
         square[j] = row;
     }
@@ -116,32 +119,11 @@ function mandelbrotImageData(width_px, max_iterations) {
 function drawMandelbrot(canvas) {
     var ctx = canvas.getContext("2d");
     var width_px = canvas.width;
-    alert("Defined variables.");
-    let mandy = mandelbrot_set(width_px, 10);
-    alert("Created array.");
+    let mandy = mandelbrot_set(width_px, 100);
     for (j = 0; j < width_px; j++) {
         for (i = 0; i < width_px; i++) {
             ctx.fillStyle = mandy[j][i];
             ctx.fillRect(i, j, 1, 1);
         }
     }
-    alert("Done!");
 }
-
-
-
-/*
-let c = math.complex(0.5, 0.5);
-let n = 100
-
-console.log(div_time(c, n));
-console.log(div_fraction(c, n));
-console.log(to_color(div_fraction(c, n)));
-*/
-
-/*
-let mandy = mandelbrot_set(50, 10);
-
-
-console.log(mandy)
-*/
