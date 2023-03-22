@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mandelbrot Set</title>
+<style>
+    #mandelbrot {
+        border: 1px solid #000000;
+    }
+</style>
+<script src="mandelbrot.js"></script>
+</head>
+
+<body>
+
+<canvas id="mandelbrot" width="50" height="50"></canvas>
+
+<!--
+<button onclick="drawMandelbrot()">Draw Mandelbrot set!</button>
+-->
+
+<script>
+    var canvas = document.getElementById("mandelbrot");
+    drawMandelbrot(canvas);
+</script>
+
+</body>
+
+</html>

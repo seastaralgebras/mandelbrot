@@ -36,26 +36,33 @@ function dec_to_hex(x) {
     if (x > 255) {
         return "ff";
     } else if (x < 0) {
-        return "00;"
+        return "00";
     } else {
         let n = math.floor(x);
         if (n < 16) {
             return "0"+n.toString(16);
         } else {
-            return n.toString(16)
+            return n.toString(16);
         }
     }
 }
 
-
 function to_color(t) {
+    let r = math.floor(math.multiply(t, 0));
+    let g = math.floor(math.multiply(t, 160));
+    let b = math.floor(math.multiply(t, 255));
+    return [r, g, b, 255];
+}
+
+
+function to_color_string(t) {
     let r = math.multiply(t, 0);
     let g = math.multiply(t, 160);
     let b = math.multiply(t, 255);
     let r_hex = dec_to_hex(r);
     let g_hex = dec_to_hex(g);
     let b_hex = dec_to_hex(b);
-    return r_hex + g_hex + b_hex;
+    return "#" + r_hex + g_hex + b_hex;
 }
 
 
@@ -84,13 +91,42 @@ function mandelbrot_set(width_px, max_iterations) {
     for (j = 0; j < width_px; j++) {
         let row = [];
         for (i = 0; i < width_px; i++) {
-            row[i] = to_color(div_fraction(square[j][i], max_iterations));
+            row[i] = to_color_string(div_fraction(square[j][i], max_iterations));
         }
         pixels[j] = row;
     }
     return pixels;
 }
 
+function mandelbrotImageData(width_px, max_iterations) {
+    let square = matrix_generator(width_px);
+    let pixels = [];
+    for (j = 0; j < width_px; j++) {
+        for (i = 0; i < width_px; i++) {
+            let point = square[j][i];
+            let color = to_color(div_fraction(point, max_iterations));
+            pixels = pixels.concat(color);
+        }
+    }
+    return pixels;
+}
+
+
+
+function drawMandelbrot(canvas) {
+    var ctx = canvas.getContext("2d");
+    var width_px = canvas.width;
+    alert("Defined variables.");
+    let mandy = mandelbrot_set(width_px, 10);
+    alert("Created array.");
+    for (j = 0; j < width_px; j++) {
+        for (i = 0; i < width_px; i++) {
+            ctx.fillStyle = mandy[j][i];
+            ctx.fillRect(i, j, 1, 1);
+        }
+    }
+    alert("Done!");
+}
 
 
 
@@ -101,8 +137,11 @@ let n = 100
 console.log(div_time(c, n));
 console.log(div_fraction(c, n));
 console.log(to_color(div_fraction(c, n)));
+*/
 
-let mandy = mandelbrot_set(10, 50);
+/*
+let mandy = mandelbrot_set(50, 10);
+
 
 console.log(mandy)
 */
