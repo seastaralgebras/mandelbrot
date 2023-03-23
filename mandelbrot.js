@@ -1,12 +1,6 @@
-// stuff
-
 var math = require('mathjs');
 
-/*
-var c;
-var z;
-var x;
-*/
+
 
 function modulus(z) {
     return math.multiply(z, math.conj(z));
@@ -17,7 +11,7 @@ function julia_iteration(z, c) {
 }
 
 function div_time(z, c, max_n) {
-    let threshold = 10;
+    let threshold = 3;
     let z_temp = z;
     for (let i = 0; i < max_n; i++) {
         z_temp = julia_iteration(z_temp, c);
@@ -25,11 +19,13 @@ function div_time(z, c, max_n) {
             return i;
         }
     }
-    return max_n;
+    //return max_n;
+    return 0;
 }
 
 function div_fraction(z, c, max_n) {
-    return 1-math.divide(math.log10(div_time(z, c, max_n)+1), math.log10(max_n));
+    //return 1-math.divide(math.log10(div_time(z, c, max_n)+1), math.log10(max_n));
+    return math.divide(math.log10(div_time(z, c, max_n)+1), math.log10(max_n));
 }
 
 function dec_to_hex(x) {
@@ -47,29 +43,36 @@ function dec_to_hex(x) {
     }
 }
 
-function to_color(t) {
-    let r = math.floor(math.multiply(t, 0));
-    let g = math.floor(math.multiply(t, 160));
-    let b = math.floor(math.multiply(t, 255));
-    return [r, g, b, 255];
-}
 
-
-function to_color_string(t) {
-    let r = math.multiply(t, 0);
-    let g = math.multiply(t, 160);
-    let b = math.multiply(t, 255);
+function to_color_rgb(t) {
+    let r = math.multiply(t, 255);
+    let g = math.multiply(t, 96);
+    let b = math.multiply(t, 126);
     let r_hex = dec_to_hex(r);
     let g_hex = dec_to_hex(g);
     let b_hex = dec_to_hex(b);
     return "#" + r_hex + g_hex + b_hex;
 }
 
+function to_color_hsl(t) {
+    let h_1 = 330;
+    let h_0 = 210;
+    let h = h_0 + math.multiply(t, h_1-h_0);
+    let s = 100;
+    let l = math.floor(math.multiply(t, 80));
+    let color = "hsl(" + h + ", " + s + "%, " + l + "%)";
+    return color;
+}
 
-function matrix_generator(width_px) {
-    let x_c = 0;
-    let y_c = 0;
-    let width = 4.2;
+function to_color(t) {
+    return to_color_hsl(t);
+}
+
+
+function matrix_generator(width_px, x_c, y_c, width) {
+    //let x_c = 0;
+    //let y_c = 0;
+    //let width = 4.2;
     let k_step = width/(width_px);
     let x = x_c - width/2;
     let y = y_c - width/2;
@@ -87,13 +90,13 @@ function matrix_generator(width_px) {
 }
 
 function julia_set(width_px, c, max_iterations) {
-    let square = matrix_generator(width_px);
+    let square = matrix_generator(width_px, 0, 0, 4.2);
     let pixels = [];
     for (j = 0; j < width_px; j++) {
         let row = [];
         for (i = 0; i < width_px; i++) {
             point = square[j][i];
-            row[i] = to_color_string(div_fraction(point, c, max_iterations));
+            row[i] = to_color(div_fraction(point, c, max_iterations));
         }
         pixels[j] = row;
     }
@@ -102,13 +105,13 @@ function julia_set(width_px, c, max_iterations) {
 
 
 function mandelbrot_set(width_px, max_iterations) {
-    let square = matrix_generator(width_px);
+    let square = matrix_generator(width_px, -0.5, 0, 3.2);
     let pixels = [];
     for (j = 0; j < width_px; j++) {
         let row = [];
         for (i = 0; i < width_px; i++) {
             point = square[j][i];
-            row[i] = to_color_string(div_fraction(0, point, max_iterations));
+            row[i] = to_color(div_fraction(0, point, max_iterations));
         }
         pixels[j] = row;
     }
@@ -144,51 +147,3 @@ function drawJulia(canvas, real, imaginary) {
     }
 }
 
-
-/*
-let width_px = 20;
-let n = 50;
-let c = math.complex(.5, .5);
-let t = div_time(0, c, n);
-let mandy = mandelbrot_set(width_px, n);
-console.log(t);
-*/
-
-
-
-/*
-function mandelbrotImageData(width_px, max_iterations) {
-    let square = matrix_generator(width_px);
-    let pixels = [];
-    for (j = 0; j < width_px; j++) {
-        for (i = 0; i < width_px; i++) {
-            let point = square[j][i];
-            let color = to_color(div_fraction(point, max_iterations));
-            pixels = pixels.concat(color);
-        }
-    }
-    return pixels;
-}
-
-
-
-function drawMandelbrot_alt(canvas) {
-    var ctx = canvas.getContext("2d");
-    var width_px = canvas.width;
-    let n = 100;
-    let x_c = -0.5;
-    let y_c = 0;
-    let width = 3.2;
-    let k_step = width/(width_px);
-    let x = x_c - width/2;
-    let y = y_c - width/2;
-    let point = math.complex(x, y);
-    for (j = 0; j < width_px; j++) {
-        for (i = 0; i < width_px; i++) {
-            point = math.complex(x+i*k_step, y+j*k_step);
-            ctx.fillStyle = to_color_string(div_fraction(point, n));
-            ctx.fillRect(i, j, 1, 1);
-        }
-    }
-}
-*/
