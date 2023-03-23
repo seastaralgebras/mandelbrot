@@ -19,8 +19,8 @@ function div_time(z, c, max_n) {
             return i;
         }
     }
-    //return max_n;
-    return 0;
+    return max_n;
+    //return 0;
 }
 
 function div_fraction(z, c, max_n) {
@@ -55,11 +55,11 @@ function to_color_rgb(t) {
 }
 
 function to_color_hsl(t) {
-    let h_1 = 330;
-    let h_0 = 210;
-    let h = h_0 + math.multiply(t, h_1-h_0);
+    let h_0 = 240;
+    let h_1 = 120;
+    let h = math.floor(h_0 + math.multiply(t, h_1-h_0))%360;
     let s = 100;
-    let l = math.floor(math.multiply(t, 80));
+    let l = math.floor(math.multiply(1-t, 90));
     let color = "hsl(" + h + ", " + s + "%, " + l + "%)";
     return color;
 }
@@ -70,9 +70,6 @@ function to_color(t) {
 
 
 function matrix_generator(width_px, x_c, y_c, width) {
-    //let x_c = 0;
-    //let y_c = 0;
-    //let width = 4.2;
     let k_step = width/(width_px);
     let x = x_c - width/2;
     let y = y_c - width/2;
@@ -123,7 +120,7 @@ function mandelbrot_set(width_px, max_iterations) {
 function drawMandelbrot(canvas) {
     var ctx = canvas.getContext("2d");
     var width_px = canvas.width;
-    let mandy = mandelbrot_set(width_px, 100);
+    let mandy = mandelbrot_set(width_px, 150);
     for (j = 0; j < width_px; j++) {
         for (i = 0; i < width_px; i++) {
             ctx.fillStyle = mandy[j][i];
@@ -138,7 +135,7 @@ function drawJulia(canvas, real, imaginary) {
     var c = math.complex(real, imaginary);
     var ctx = canvas.getContext("2d");
     var width_px = canvas.width;
-    let julia = julia_set(width_px, c, 100);
+    let julia = julia_set(width_px, c, 150);
     for (j = 0; j < width_px; j++) {
         for (i = 0; i < width_px; i++) {
             ctx.fillStyle = julia[j][i];
